@@ -363,30 +363,147 @@
     text-align: right; margin-left: auto; max-width: 80%;
   }
 
-  /* FLOATING ASK LOGOS BUTTON */
+  /* ═══ LOGOS PANEL SYSTEM ═══ */
+
+  /* Backdrop */
+  .logos-backdrop {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(20,18,14,0); pointer-events: none;
+    transition: background 400ms var(--ease-out);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background 400ms var(--ease-out), backdrop-filter 400ms var(--ease-out);
+  }
+  .logos-backdrop.open {
+    background: rgba(20,18,14,0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    pointer-events: all;
+  }
+
+  /* Slide-in panel */
+  .logos-panel {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 400;
+    width: min(480px, 100vw);
+    background: var(--warm-white);
+    transform: translateX(100%);
+    transition: transform 480ms var(--ease-out);
+    display: flex; flex-direction: column;
+    box-shadow: -8px 0 48px rgba(0,0,0,0.18);
+  }
+  .logos-panel.open {
+    transform: translateX(0);
+  }
+
+  /* Panel header */
+  .logos-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.25rem;
+    height: 56px; flex-shrink: 0;
+    background: linear-gradient(135deg, #1e3520 0%, #2c4a2e 100%);
+    border-bottom: 1px solid rgba(184,146,42,0.25);
+  }
+  .logos-panel-brand {
+    display: flex; align-items: center; gap: 0.65rem;
+  }
+  .logos-panel-icon {
+    width: 30px; height: 30px;
+    background: rgba(184,146,42,0.2);
+    border: 1px solid rgba(184,146,42,0.45);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .logos-panel-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; font-weight: 300;
+    color: var(--cream); letter-spacing: 2px;
+    line-height: 1;
+  }
+  .logos-panel-sub {
+    font-size: 0.6rem; letter-spacing: 2.5px;
+    color: rgba(196,169,107,0.8); text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .logos-panel-close {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(245,240,232,0.7);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 1rem; line-height: 1;
+    transition: all 200ms var(--ease-out);
+    font-family: 'Jost', sans-serif;
+  }
+  .logos-panel-close:hover {
+    background: rgba(255,255,255,0.15);
+    color: var(--cream);
+    transform: rotate(90deg);
+  }
+
+  /* Iframe wrapper */
+  .logos-panel-body {
+    flex: 1; overflow: hidden; position: relative;
+  }
+  .logos-panel-body iframe {
+    width: 100%; height: 100%;
+    border: none; display: block;
+  }
+  .logos-panel-loading {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 1rem;
+    background: #f5f0e8;
+    transition: opacity 300ms;
+    pointer-events: none;
+  }
+  .logos-panel-loading.hidden { opacity: 0; }
+  .logos-panel-loading-icon {
+    font-size: 2rem; animation: spin 2s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .logos-panel-loading-text {
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* Floating trigger button */
   .logos-float {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
-    display: flex; align-items: center; gap: 0.6rem;
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 350;
+    display: flex; align-items: center; gap: 0.55rem;
     background: #2c4a2e; color: var(--cream);
-    padding: 0.75rem 1.3rem; border-radius: 100px;
-    text-decoration: none; font-size: 0.75rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0 1.4rem; height: 46px; border-radius: 100px;
+    border: 1px solid rgba(184,146,42,0.35);
+    font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
     font-family: 'Jost', sans-serif; font-weight: 400;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-    transition: all 250ms var(--ease-out);
-    border: 1px solid rgba(196,169,107,0.3);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(44,74,46,0.4), 0 1px 4px rgba(0,0,0,0.15);
+    transition: transform 350ms var(--ease-out),
+                box-shadow 350ms var(--ease-out),
+                background 200ms,
+                right 480ms var(--ease-out),
+                opacity 300ms;
+    will-change: transform;
   }
   .logos-float:hover {
-    background: #3a5e3c; transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    background: #3a5e3c;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 32px rgba(44,74,46,0.45), 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .logos-float:active { transform: scale(0.97); }
+  .logos-float.panel-open {
+    opacity: 0; pointer-events: none; transform: translateX(20px);
   }
   .logos-float-dot {
     width: 7px; height: 7px; border-radius: 50%;
-    background: var(--gold); animation: pulse 2s infinite;
+    background: var(--gold);
+    box-shadow: 0 0 6px rgba(196,169,107,0.6);
+    animation: pulse 2.4s ease-in-out infinite;
+    flex-shrink: 0;
   }
   @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(0.85); }
+    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 6px rgba(196,169,107,0.6); }
+    50% { opacity: 0.7; transform: scale(0.8); box-shadow: 0 0 12px rgba(196,169,107,0.8); }
   }
 
   /* RESPONSIVE */
@@ -795,7 +912,7 @@
       <div class="logos-feature">Safe guidance for acute family situations</div>
       <div class="logos-feature">Available in Portuguese, English, and Spanish</div>
     </div>
-    <a href="https://logos-ai-production.up.railway.app" target="_blank" rel="noopener" class="btn btn-primary" style="align-self:flex-start;">Open Logos →</a>
+    <button onclick="document.getElementById('logosBtn').click()" class="btn btn-primary" style="align-self:flex-start;cursor:pointer;">Open Logos →</button>
   </div>
   <div class="logos-preview">
     <div class="logos-preview-inner">
@@ -862,18 +979,46 @@
   <div class="footer-copy">© 2026 Cura Materia. All rights reserved.</div>
 </footer>
 
-<!-- FLOATING LOGOS BUTTON -->
-<a class="logos-float" href="https://logos-ai-production.up.railway.app" target="_blank" rel="noopener">
+<!-- LOGOS BACKDROP -->
+<div class="logos-backdrop" id="logosBackdrop"></div>
+
+<!-- LOGOS SLIDE-IN PANEL -->
+<div class="logos-panel" id="logosPanel" role="dialog" aria-modal="true" aria-label="Logos AI Homeopath">
+  <div class="logos-panel-header">
+    <div class="logos-panel-brand">
+      <div class="logos-panel-icon">🌿</div>
+      <div>
+        <div class="logos-panel-title">Logos</div>
+        <div class="logos-panel-sub">AI Homeopath</div>
+      </div>
+    </div>
+    <button class="logos-panel-close" id="logosClose" aria-label="Close Logos">✕</button>
+  </div>
+  <div class="logos-panel-body">
+    <div class="logos-panel-loading" id="logosLoading">
+      <div class="logos-panel-loading-icon">🌿</div>
+      <div class="logos-panel-loading-text">Opening Logos…</div>
+    </div>
+    <iframe id="logosFrame" title="Logos AI Homeopath" allow="clipboard-write"></iframe>
+  </div>
+</div>
+
+<!-- FLOATING TRIGGER BUTTON -->
+<button class="logos-float" id="logosBtn" aria-haspopup="dialog">
   <div class="logos-float-dot"></div>
   Ask Logos
-</a>
+</button>
 
 <script>
-  // Hero parallax bg
+  // ── Hero ──
   const heroBg = document.getElementById('heroBg');
   setTimeout(() => heroBg.classList.add('loaded'), 100);
 
-  // Filter buttons
+  window.addEventListener('scroll', () => {
+    heroBg.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+  }, { passive: true });
+
+  // ── Store filters ──
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -881,11 +1026,56 @@
     });
   });
 
-  // Subtle hero parallax on scroll
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    heroBg.style.transform = `translateY(${y * 0.3}px)`;
-  }, { passive: true });
+  // ── Logos panel ──
+  const panel     = document.getElementById('logosPanel');
+  const backdrop  = document.getElementById('logosBackdrop');
+  const btn       = document.getElementById('logosBtn');
+  const closeBtn  = document.getElementById('logosClose');
+  const frame     = document.getElementById('logosFrame');
+  const loading   = document.getElementById('logosLoading');
+  const LOGOS_URL = 'https://logos-ai-production.up.railway.app';
+  let   loaded    = false;
+
+  function openLogos() {
+    // Lazy-load the iframe only on first open
+    if (!loaded) {
+      frame.src = LOGOS_URL;
+      frame.addEventListener('load', () => {
+        loading.classList.add('hidden');
+      }, { once: true });
+      loaded = true;
+    }
+    panel.classList.add('open');
+    backdrop.classList.add('open');
+    btn.classList.add('panel-open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function closeLogos() {
+    panel.classList.remove('open');
+    backdrop.classList.remove('open');
+    btn.classList.remove('panel-open');
+    document.body.style.overflow = '';
+    btn.focus();
+  }
+
+  btn.addEventListener('click', openLogos);
+  closeBtn.addEventListener('click', closeLogos);
+  backdrop.addEventListener('click', closeLogos);
+
+  // Escape key closes
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && panel.classList.contains('open')) closeLogos();
+  });
+
+  // Also wire up all "Ask Logos" section buttons
+  document.querySelectorAll('[href="#logos"], [href*="logos-ai"]').forEach(el => {
+    if (el.tagName === 'A' && el.getAttribute('href') !== '#logos') return;
+    el.addEventListener('click', e => {
+      if (el.getAttribute('href') === '#logos') return; // let scroll happen
+    });
+  });
 </script>
 
 </body>
