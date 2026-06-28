@@ -36,12 +36,12 @@
 
   /* NAV */
   nav {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--warm-white);
-    border-bottom: 1px solid rgba(0,0,0,0.08);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 0 3rem;
-    height: 64px;
+    padding: 0 3rem; height: 64px;
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
   }
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
@@ -58,29 +58,62 @@
   .nav-links a:hover { color: var(--charcoal); }
   .nav-cart {
     cursor: pointer; font-size: 0.78rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted); background: none; border: none;
-    font-family: 'Jost', sans-serif;
+    text-transform: uppercase; color: var(--muted); background: none;
+    border: none; font-family: 'Jost', sans-serif;
   }
 
   /* HERO */
   .hero {
-    min-height: 92vh;
-    display: grid; grid-template-columns: 1fr 1fr; align-items: center;
-    padding: 4rem 3rem;
-    gap: 4rem;
-    background: var(--cream);
+    position: relative; height: 100vh; min-height: 600px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; overflow: hidden;
   }
-  .hero-text h1 {
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('images/hero-hands.png');
+    background-size: cover; background-position: center 40%;
+    transform: scale(1.04);
+    transition: transform 8s ease-out;
+  }
+  .hero-bg.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+      rgba(20,18,14,0.35) 0%,
+      rgba(20,18,14,0.25) 50%,
+      rgba(20,18,14,0.55) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 680px; padding: 0 2rem;
+  }
+  .hero-content .section-label { color: rgba(245,240,232,0.7); margin-bottom: 1.2rem; }
+  .hero-content h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.8rem, 5vw, 4.5rem);
-    font-weight: 300; line-height: 1.1; letter-spacing: -0.01em;
-    color: var(--charcoal); margin-bottom: 1.5rem;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 300; line-height: 1.05; color: var(--cream);
+    letter-spacing: -0.01em; margin-bottom: 1.5rem;
   }
-  .hero-text h1 em { font-style: italic; color: var(--dark-sage); }
-  .hero-text p {
-    font-size: 1rem; color: var(--muted); max-width: 440px;
-    margin-bottom: 2.5rem; line-height: 1.8;
+  .hero-content h1 em { font-style: italic; color: #d4c9a8; }
+  .hero-content p {
+    font-size: 1rem; color: rgba(245,240,232,0.8);
+    max-width: 460px; margin: 0 auto 2.5rem; line-height: 1.8;
   }
+  .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center;
+    gap: 0.4rem; color: rgba(245,240,232,0.5);
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 40px;
+    background: rgba(245,240,232,0.3);
+    animation: scrollline 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollline { 0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+
+  /* BUTTONS */
   .btn {
     display: inline-block; padding: 0.85rem 2.2rem;
     font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase;
@@ -89,24 +122,14 @@
     transition: all 200ms var(--ease-out);
   }
   .btn:active { transform: scale(0.97); }
-  .btn-primary { background: var(--charcoal); color: var(--warm-white); }
-  .btn-primary:hover { background: var(--dark-sage); }
-  .btn-outline {
-    background: transparent; color: var(--charcoal);
-    border: 1px solid var(--charcoal);
-  }
+  .btn-primary { background: var(--cream); color: var(--charcoal); }
+  .btn-primary:hover { background: var(--warm-white); }
+  .btn-primary-dark { background: var(--charcoal); color: var(--cream); }
+  .btn-primary-dark:hover { background: var(--dark-sage); }
+  .btn-outline { background: transparent; color: var(--charcoal); border: 1px solid var(--charcoal); }
   .btn-outline:hover { background: var(--charcoal); color: var(--warm-white); }
-
-  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
-
-  .hero-bottles {
-    display: flex; align-items: flex-end; justify-content: center;
-    gap: 1.5rem; height: 480px;
-  }
-  .bottle-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-  .bottle-wrap span { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .bottle-wrap svg { transition: transform 300ms var(--ease-out); }
-  .bottle-wrap:hover svg { transform: translateY(-8px); }
+  .btn-outline-light { background: transparent; color: var(--cream); border: 1px solid rgba(245,240,232,0.5); }
+  .btn-outline-light:hover { background: rgba(245,240,232,0.1); border-color: var(--cream); }
 
   /* MARQUEE */
   .marquee-strip {
@@ -117,13 +140,13 @@
     display: inline-block; animation: marquee 22s linear infinite;
     font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
   }
-  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
   /* SECTIONS */
   section { padding: 5rem 3rem; }
   .section-label {
     font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--sage); margin-bottom: 0.8rem;
+    color: var(--sage); margin-bottom: 0.8rem; display: block;
   }
   .section-title {
     font-family: 'Cormorant Garamond', serif;
@@ -133,50 +156,44 @@
   }
 
   /* ABOUT */
-  .about-strip {
-    background: var(--light-sage);
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center;
-  }
-  .about-strip p { color: var(--muted); max-width: 480px; margin-bottom: 1.5rem; }
-
-  .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 0; }
-  .pillar { padding: 2rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.07); }
-  .pillar-icon { font-size: 1.8rem; margin-bottom: 1rem; }
-  .pillar h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; margin-bottom: 0.5rem; }
-  .pillar p { font-size: 0.88rem; color: var(--muted); }
-
-  /* LABELS */
-  .labels-section { background: var(--cream); }
-  .labels-grid { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; margin-top: 3rem; }
-  .labels-grid svg { transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); border-radius: 6px; }
-  .labels-grid svg:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+  .about { background: var(--cream); padding: 0; display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
+  .about-image { overflow: hidden; }
+  .about-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 6s ease-out; }
+  .about-image:hover img { transform: scale(1.03); }
+  .about-text { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; }
+  .about-text p { color: var(--muted); max-width: 440px; margin-bottom: 1.2rem; }
+  .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+  .pillar { padding: 1.5rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.06); }
+  .pillar-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+  .pillar h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; margin-bottom: 0.3rem; }
+  .pillar p { font-size: 0.82rem; color: var(--muted); }
 
   /* STORE */
   .store { background: var(--warm-white); }
-  .store-filters { display: flex; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+  .store-filters { display: flex; gap: 0.75rem; margin-bottom: 3rem; flex-wrap: wrap; }
   .filter-btn {
-    padding: 0.45rem 1.2rem; font-size: 0.72rem; letter-spacing: 0.12em;
+    padding: 0.4rem 1.1rem; font-size: 0.72rem; letter-spacing: 0.12em;
     text-transform: uppercase; border: 1px solid var(--sand); background: transparent;
     color: var(--muted); cursor: pointer; transition: all 200ms var(--ease-out);
     font-family: 'Jost', sans-serif;
   }
   .filter-btn.active, .filter-btn:hover { background: var(--charcoal); color: var(--warm-white); border-color: var(--charcoal); }
   .products-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
-
   .product-card { cursor: pointer; }
   .product-img {
-    background: var(--cream); aspect-ratio: 3/4;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1rem; overflow: hidden; position: relative;
+    aspect-ratio: 3/4; overflow: hidden; margin-bottom: 1rem;
+    background: var(--cream);
   }
-  .product-img svg { transition: transform 300ms var(--ease-out); }
-  .product-card:hover .product-img svg { transform: translateY(-8px); }
-  .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 400; margin-bottom: 0.25rem; }
-  .product-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+  .product-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 400ms var(--ease-out);
+  }
+  .product-card:hover .product-img img { transform: scale(1.04); }
+  .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 400; margin-bottom: 0.2rem; }
+  .product-sub { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 0.4rem; }
   .product-price { font-size: 0.88rem; color: var(--dark-sage); font-weight: 400; }
   .product-add {
-    margin-top: 0.5rem; width: 100%; padding: 0.6rem;
+    margin-top: 0.6rem; width: 100%; padding: 0.6rem;
     font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
     background: transparent; border: 1px solid var(--sand); color: var(--muted);
     cursor: pointer; transition: all 200ms var(--ease-out); font-family: 'Jost', sans-serif;
@@ -186,21 +203,52 @@
   .product-add.featured { background: var(--dark-sage); color: var(--warm-white); border-color: var(--dark-sage); }
 
   /* KIT */
-  .kit-section { background: var(--charcoal); color: var(--cream); padding: 5rem 3rem; }
+  .kit-section {
+    position: relative; min-height: 600px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+  .kit-bg {
+    position: absolute; inset: 0;
+    background-image: url('images/kit-dark.png');
+    background-size: cover; background-position: center;
+  }
+  .kit-bg-overlay { position: absolute; inset: 0; background: rgba(20,18,14,0.72); }
+  .kit-content {
+    position: relative; z-index: 2;
+    padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center;
+  }
   .kit-section .section-label { color: var(--sand); }
   .kit-section .section-title { color: var(--cream); }
-  .kit-section p { color: rgba(245,240,232,0.75); max-width: 480px; margin-bottom: 2rem; }
-  .kit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-  .kit-remedies { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 2rem; margin-bottom: 2rem; }
-  .kit-remedies span { font-size: 0.82rem; color: var(--sand); }
-  .kit-preview { display: flex; align-items: flex-end; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
+  .kit-section p { color: rgba(245,240,232,0.75); max-width: 420px; margin-bottom: 1.5rem; }
+  .kit-remedies { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1.5rem; margin-bottom: 2rem; }
+  .kit-remedies span { font-size: 0.8rem; color: var(--sand); }
+  .kit-photo {
+    position: relative; z-index: 2;
+    overflow: hidden;
+  }
+  .kit-photo img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+
+  /* PROCESS STRIP */
+  .process-strip {
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 480px; background: var(--light-sage);
+  }
+  .process-image { overflow: hidden; }
+  .process-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 6s ease-out; }
+  .process-image:hover img { transform: scale(1.03); }
+  .process-text { padding: 4rem; display: flex; flex-direction: column; justify-content: center; }
+  .process-text p { color: var(--muted); max-width: 400px; margin-bottom: 1.2rem; }
 
   /* EDUCATION */
   .education { background: var(--cream); }
   .edu-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
   .edu-card { border: 1px solid rgba(0,0,0,0.07); overflow: hidden; background: var(--warm-white); transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
   .edu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-  .edu-card-header { padding: 2.5rem 2rem 1.5rem; background: linear-gradient(135deg, var(--light-sage), var(--cream)); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+  .edu-card-img { height: 200px; overflow: hidden; }
+  .edu-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 400ms var(--ease-out); }
+  .edu-card:hover .edu-card-img img { transform: scale(1.04); }
+  .edu-card-header { padding: 2rem 1.5rem 1rem; background: linear-gradient(135deg, var(--light-sage), var(--cream)); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
   .edu-card-body { padding: 1.5rem; }
   .edu-card-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; margin-bottom: 0.5rem; }
   .edu-card-body p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
@@ -208,22 +256,24 @@
 
   /* TESTIMONIALS */
   .testimonials { background: var(--warm-white); }
-  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 3rem; }
-  .testimonial { padding: 2rem; border: 1px solid rgba(0,0,0,0.07); }
-  .stars { color: var(--gold); margin-bottom: 1rem; font-size: 0.8rem; letter-spacing: 0.2em; }
-  .testimonial p { font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--charcoal); margin-bottom: 1rem; line-height: 1.6; }
+  .testimonials-inner { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; }
+  .testimonials-image { overflow: hidden; aspect-ratio: 3/4; }
+  .testimonials-image img { width: 100%; height: 100%; object-fit: cover; }
+  .testimonials-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+  .testimonial { padding: 1.8rem; border: 1px solid rgba(0,0,0,0.07); }
+  .stars { color: var(--gold); margin-bottom: 0.8rem; font-size: 0.8rem; letter-spacing: 0.2em; }
+  .testimonial p { font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--charcoal); margin-bottom: 0.8rem; line-height: 1.6; }
   .testimonial cite { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
 
   /* NEWSLETTER */
   .newsletter { background: var(--sage); color: var(--warm-white); text-align: center; padding: 4rem 3rem; }
   .newsletter h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; margin-bottom: 0.5rem; }
   .newsletter p { color: rgba(250,247,242,0.8); margin-bottom: 2rem; }
-  .newsletter-form { display: flex; gap: 0; max-width: 400px; margin: 0 auto; }
+  .newsletter-form { display: flex; max-width: 400px; margin: 0 auto; }
   .newsletter-form input { flex: 1; padding: 0.8rem 1.2rem; border: none; background: rgba(255,255,255,0.15); color: var(--warm-white); font-family: 'Jost', sans-serif; font-size: 0.85rem; outline: none; }
   .newsletter-form input::placeholder { color: rgba(250,247,242,0.6); }
-  .newsletter-form button { padding: 0.8rem 1.5rem; background: var(--charcoal); color: var(--warm-white); border: none; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 200ms var(--ease-out); }
+  .newsletter-form button { padding: 0.8rem 1.5rem; background: var(--charcoal); color: var(--warm-white); border: none; font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: background 200ms; }
   .newsletter-form button:hover { background: var(--dark-sage); }
-  .newsletter-form button:active { transform: scale(0.97); }
 
   /* FOOTER */
   footer { background: var(--charcoal); color: rgba(245,240,232,0.6); padding: 3rem; font-size: 0.8rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; }
@@ -235,28 +285,39 @@
   .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: var(--cream); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.8rem; }
   .footer-copy { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); grid-column: 1/-1; font-size: 0.72rem; color: rgba(245,240,232,0.3); }
 
+  /* LABELS */
+  .labels-section { background: var(--warm-white); }
+  .labels-grid { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; margin-top: 3rem; }
+  .labels-grid svg { transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); border-radius: 6px; }
+  .labels-grid svg:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
   /* RESPONSIVE */
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
     nav { padding: 0 1.5rem; }
     .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; min-height: auto; padding: 3rem 1.5rem; }
-    .hero-bottles { height: 300px; }
     section { padding: 3.5rem 1.5rem; }
-    .about-strip { grid-template-columns: 1fr; }
+    .about { grid-template-columns: 1fr; }
+    .about-image { height: 340px; }
+    .about-text { padding: 3rem 1.5rem; }
     .pillars { grid-template-columns: 1fr 1fr; }
     .products-grid { grid-template-columns: repeat(2,1fr); }
-    .edu-grid { grid-template-columns: 1fr; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .kit-grid { grid-template-columns: 1fr; }
+    .kit-section { grid-template-columns: 1fr; }
+    .kit-photo { display: none; }
+    .kit-content { padding: 4rem 1.5rem; }
+    .process-strip { grid-template-columns: 1fr; }
+    .process-image { height: 320px; }
+    .process-text { padding: 3rem 1.5rem; }
+    .edu-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-inner { grid-template-columns: 1fr; }
+    .testimonials-image { display: none; }
     footer { grid-template-columns: 1fr 1fr; }
   }
-
   @media (max-width: 600px) {
     .products-grid { grid-template-columns: 1fr; }
     .pillars { grid-template-columns: 1fr; }
+    .edu-grid { grid-template-columns: 1fr; }
     footer { grid-template-columns: 1fr; }
   }
-
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
@@ -279,75 +340,18 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-text">
-    <p class="section-label">Classical Homeopathy</p>
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="section-label">Classical Homeopathy</span>
     <h1>Healing rooted in<br><em>nature's intelligence</em></h1>
     <p>Cura Materia offers carefully prepared homeopathic remedies for families seeking gentle, whole-person healing. Each remedy is crafted with intention and classical tradition.</p>
     <div class="hero-buttons">
       <a href="#store" class="btn btn-primary">Shop Remedies</a>
-      <a href="#kit" class="btn btn-outline">Lua's Starter Kit</a>
+      <a href="#kit" class="btn btn-outline-light">Lua's Starter Kit</a>
     </div>
   </div>
-  <div class="hero-bottles">
-    <div class="bottle-wrap">
-      <svg width="80" height="220" viewBox="0 0 80 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="28" y="2" width="24" height="18" rx="3" fill="#c9b89a"/>
-        <rect x="22" y="18" width="36" height="4" rx="1" fill="#b5a08a"/>
-        <rect x="8" y="22" width="64" height="188" rx="6" fill="#f0ebe0"/>
-        <rect x="8" y="22" width="64" height="188" rx="6" fill="none" stroke="#c9b89a" stroke-width="1.5"/>
-        <rect x="14" y="55" width="52" height="110" rx="3" fill="#e8ede5" stroke="#8a9e82" stroke-width="1"/>
-        <text x="40" y="78" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#5a6e54" letter-spacing="1.5">CURA MATERIA</text>
-        <line x1="20" y1="83" x2="60" y2="83" stroke="#8a9e82" stroke-width="0.5"/>
-        <text x="40" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2c2c2c" font-style="italic">Arnica</text>
-        <text x="40" y="113" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#5a6e54">Montana</text>
-        <line x1="20" y1="120" x2="60" y2="120" stroke="#8a9e82" stroke-width="0.5"/>
-        <text x="40" y="132" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#7a7169">30C Pellets</text>
-        <text x="40" y="146" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#7a7169">Trauma · Bruising</text>
-        <text x="40" y="158" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#8a9e82">80 pellets · 1oz</text>
-        <circle cx="40" cy="170" r="6" fill="none" stroke="#8a9e82" stroke-width="0.8"/>
-        <text x="40" y="173" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#8a9e82">✦</text>
-      </svg>
-      <span>Arnica 30C</span>
-    </div>
-    <div class="bottle-wrap" style="margin-bottom:30px;">
-      <svg width="72" height="200" viewBox="0 0 72 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="24" y="2" width="24" height="16" rx="3" fill="#c9b89a"/>
-        <rect x="18" y="16" width="36" height="4" rx="1" fill="#b5a08a"/>
-        <rect x="6" y="20" width="60" height="172" rx="6" fill="#f5f0e8"/>
-        <rect x="6" y="20" width="60" height="172" rx="6" fill="none" stroke="#c9b89a" stroke-width="1.5"/>
-        <rect x="12" y="50" width="48" height="100" rx="3" fill="#fdf8f0" stroke="#b5725a" stroke-width="0.8"/>
-        <text x="36" y="68" text-anchor="middle" font-family="Georgia,serif" font-size="6.5" fill="#5a6e54" letter-spacing="1.5">CURA MATERIA</text>
-        <line x1="17" y1="73" x2="55" y2="73" stroke="#b5725a" stroke-width="0.5"/>
-        <text x="36" y="90" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2c2c2c" font-style="italic">Belladonna</text>
-        <line x1="17" y1="100" x2="55" y2="100" stroke="#b5725a" stroke-width="0.5"/>
-        <text x="36" y="112" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#7a7169">30C Pellets</text>
-        <text x="36" y="124" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#7a7169">Fever · Inflammation</text>
-        <text x="36" y="138" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#8a9e82">80 pellets · 1oz</text>
-        <circle cx="36" cy="148" r="5" fill="none" stroke="#b5725a" stroke-width="0.8"/>
-        <text x="36" y="151" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#b5725a">✦</text>
-      </svg>
-      <span>Belladonna 30C</span>
-    </div>
-    <div class="bottle-wrap" style="margin-bottom:10px;">
-      <svg width="80" height="230" viewBox="0 0 80 230" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="28" y="2" width="24" height="18" rx="3" fill="#c9b89a"/>
-        <rect x="22" y="18" width="36" height="4" rx="1" fill="#b5a08a"/>
-        <rect x="8" y="22" width="64" height="200" rx="6" fill="#eef3eb"/>
-        <rect x="8" y="22" width="64" height="200" rx="6" fill="none" stroke="#8a9e82" stroke-width="1.5"/>
-        <rect x="14" y="55" width="52" height="118" rx="3" fill="#f5f8f3" stroke="#5a6e54" stroke-width="0.8"/>
-        <text x="40" y="75" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#5a6e54" letter-spacing="1.5">CURA MATERIA</text>
-        <line x1="20" y1="81" x2="60" y2="81" stroke="#5a6e54" stroke-width="0.5"/>
-        <text x="40" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2c2c2c" font-style="italic">Nux Vomica</text>
-        <line x1="20" y1="110" x2="60" y2="110" stroke="#5a6e54" stroke-width="0.5"/>
-        <text x="40" y="123" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#7a7169">30C Pellets</text>
-        <text x="40" y="135" text-anchor="middle" font-family="Georgia,serif" font-size="6.5" fill="#7a7169">Digestive · Stress</text>
-        <text x="40" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#8a9e82">80 pellets · 1oz</text>
-        <circle cx="40" cy="160" r="5" fill="none" stroke="#5a6e54" stroke-width="0.8"/>
-        <text x="40" y="163" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#5a6e54">✦</text>
-      </svg>
-      <span>Nux Vomica 30C</span>
-    </div>
-  </div>
+  <div class="hero-scroll">Scroll</div>
 </section>
 
 <!-- MARQUEE -->
@@ -358,47 +362,241 @@
 </div>
 
 <!-- ABOUT -->
-<section class="about-strip" id="about">
-  <div>
-    <p class="section-label">Our Philosophy</p>
-    <h2 class="section-title">Rooted in classical tradition,<br>crafted for modern families</h2>
-    <p>Cura Materia was founded on the belief that the body holds its own wisdom. Our remedies support that innate intelligence — gently, safely, and effectively. We work with classical homeopathy as taught by Hahnemann, honoring the whole person.</p>
-    <p>Every remedy is carefully prepared, potentized, and labeled with transparency. No fillers, no confusion — just pure, intentional healing.</p>
-    <a href="#education" class="btn btn-outline" style="font-size:0.72rem;margin-top:0.5rem;">Learn About Homeopathy</a>
+<section class="about" id="about">
+  <div class="about-image">
+    <img src="images/about-botanicals.png" alt="Dried botanicals and remedy bottle on aged wood" loading="lazy">
   </div>
-  <div>
+  <div class="about-text">
+    <span class="section-label">Our Philosophy</span>
+    <h2 class="section-title">Rooted in classical tradition,<br>crafted for modern families</h2>
+    <p>Cura Materia was founded on the belief that the body holds its own wisdom. Our remedies support that innate intelligence — gently, safely, and effectively.</p>
+    <p>We work with classical homeopathy as taught by Hahnemann, honoring the whole person. Every remedy is carefully prepared, potentized, and labeled with transparency.</p>
     <div class="pillars">
       <div class="pillar">
         <div class="pillar-icon">🌿</div>
         <h3>Classical Method</h3>
-        <p>Single remedies, chosen for the whole person — not just the symptom.</p>
+        <p>Single remedies, chosen for the whole person.</p>
       </div>
       <div class="pillar">
         <div class="pillar-icon">🧬</div>
         <h3>Potentized</h3>
-        <p>Remedies prepared through serial dilution and succussion per Hahnemann's Organon.</p>
+        <p>Prepared per Hahnemann's Organon.</p>
       </div>
       <div class="pillar">
         <div class="pillar-icon">👶</div>
         <h3>Family Safe</h3>
-        <p>Gentle enough for infants. Effective for adults. Safe for everyone in between.</p>
+        <p>Gentle enough for infants.</p>
       </div>
       <div class="pillar">
         <div class="pillar-icon">📋</div>
         <h3>Transparent Labels</h3>
-        <p>Every remedy labeled with the source, potency, and primary indications.</p>
+        <p>Source, potency, and indications on every bottle.</p>
+      </div>
+    </div>
+    <a href="#education" class="btn btn-outline" style="align-self:flex-start;font-size:0.72rem;">Learn About Homeopathy</a>
+  </div>
+</section>
+
+<!-- STORE -->
+<section class="store" id="store">
+  <span class="section-label">Shop</span>
+  <h2 class="section-title">Remedies &amp; Kits</h2>
+  <div class="store-filters">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Acute Care</button>
+    <button class="filter-btn">Children</button>
+    <button class="filter-btn">Emotional</button>
+    <button class="filter-btn">Digestive</button>
+    <button class="filter-btn">Kits</button>
+  </div>
+  <div class="products-grid">
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="images/arnica-bottle.png" alt="Arnica Montana 30C" loading="lazy">
+      </div>
+      <div class="product-name">Arnica Montana</div>
+      <div class="product-sub">30C · Single Remedy</div>
+      <div class="product-price">$14.00</div>
+      <button class="product-add">Add to Bag</button>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="images/belladonna-bottle.png" alt="Belladonna 30C" loading="lazy">
+      </div>
+      <div class="product-name">Belladonna</div>
+      <div class="product-sub">30C · Single Remedy</div>
+      <div class="product-price">$14.00</div>
+      <button class="product-add">Add to Bag</button>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">
+        <img src="images/chamomilla-bottle.png" alt="Chamomilla 30C" loading="lazy">
+      </div>
+      <div class="product-name">Chamomilla</div>
+      <div class="product-sub">30C · Children's Collection</div>
+      <div class="product-price">$14.00</div>
+      <button class="product-add">Add to Bag</button>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img" style="background:#1a1a1a;">
+        <img src="images/luas-kit.png" alt="Lua's Family Starter Kit" loading="lazy">
+      </div>
+      <div class="product-name">Lua's Family Starter Kit</div>
+      <div class="product-sub">12 remedies · 30C · Curated Kit</div>
+      <div class="product-price">$128.00</div>
+      <button class="product-add featured">Add to Bag</button>
+    </div>
+
+  </div>
+  <div style="text-align:center;margin-top:3rem;">
+    <a href="#" class="btn btn-outline">View All Remedies</a>
+  </div>
+</section>
+
+<!-- KIT -->
+<section class="kit-section" id="kit">
+  <div class="kit-bg"></div>
+  <div class="kit-bg-overlay"></div>
+  <div class="kit-content">
+    <span class="section-label">Curated Collection</span>
+    <h2 class="section-title">Lua's Family<br>Starter Kit</h2>
+    <p>Twelve essential remedies chosen for everyday family life — from teething to fevers, bruises to sleepless nights. Beautifully boxed, with a printed guide.</p>
+    <div class="kit-remedies">
+      <span>✦ Arnica Montana 30C</span>
+      <span>✦ Belladonna 30C</span>
+      <span>✦ Nux Vomica 30C</span>
+      <span>✦ Chamomilla 30C</span>
+      <span>✦ Pulsatilla 30C</span>
+      <span>✦ Ignatia 200C</span>
+      <span>✦ Apis Mellifica 30C</span>
+      <span>✦ Aconitum 30C</span>
+      <span>✦ Rhus Tox 30C</span>
+      <span>✦ Bryonia 30C</span>
+      <span>✦ Hepar Sulph 30C</span>
+      <span>✦ Phosphorus 30C</span>
+    </div>
+    <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
+      <a href="#" class="btn btn-primary">Add Kit to Bag — $128</a>
+      <span style="font-size:0.8rem;color:rgba(245,240,232,0.5);">Free booklet included</span>
+    </div>
+  </div>
+  <div class="kit-photo">
+    <img src="images/luas-kit.png" alt="Lua's kit bottles" loading="lazy">
+  </div>
+</section>
+
+<!-- PROCESS STRIP -->
+<section class="process-strip" id="process" style="padding:0;">
+  <div class="process-image">
+    <img src="images/process.png" alt="Homeopathic remedy preparation — mortar and botanicals" loading="lazy">
+  </div>
+  <div class="process-text">
+    <span class="section-label">Our Process</span>
+    <h2 class="section-title">Prepared with<br>intention</h2>
+    <p>Every Cura Materia remedy is prepared using classical methods — serial dilution and succussion as described by Hahnemann in the Organon. No shortcuts, no compromises.</p>
+    <p>We source botanicals with care, work in small batches, and label every bottle with full transparency about source, potency, and primary indications.</p>
+    <a href="#education" class="btn btn-outline" style="align-self:flex-start;font-size:0.72rem;margin-top:0.5rem;">Learn the Method</a>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="education" id="education">
+  <span class="section-label">Learn</span>
+  <h2 class="section-title">Understanding Homeopathy</h2>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-card-img">
+        <img src="images/arnica-macro.png" alt="Arnica Montana flowers" loading="lazy">
+      </div>
+      <div class="edu-card-body">
+        <h3>What is Classical Homeopathy?</h3>
+        <p>A single remedy chosen to match the whole person — physical, emotional, and mental symptoms together.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-card-header">🔬</div>
+      <div class="edu-card-body">
+        <h3>How Potencies Work</h3>
+        <p>Understanding 6C, 30C, 200C and 1M — what potency means and when to use each in acute and chronic care.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-card-img">
+        <img src="images/mother-child.png" alt="Mother giving remedy to child" loading="lazy">
+      </div>
+      <div class="edu-card-body">
+        <h3>Homeopathy for Families</h3>
+        <p>A guide to building a home remedy kit and handling common acute situations — fevers, injuries, colds, and more.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-card-header">🌿</div>
+      <div class="edu-card-body">
+        <h3>Materia Medica Spotlight</h3>
+        <p>Monthly deep dives into a single remedy — its source, keynote symptoms, and clinical applications.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-card-header">💧</div>
+      <div class="edu-card-body">
+        <h3>Taking Your Remedy</h3>
+        <p>How to dose, how often, how to store, and what to avoid — a plain-language guide to using remedies correctly.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-card-header">🧠</div>
+      <div class="edu-card-body">
+        <h3>Hahnemann &amp; The Organon</h3>
+        <p>The history and philosophy of homeopathy — from Hahnemann's discovery to the 6th edition of the Organon.</p>
+        <a href="#">Read More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <span class="section-label">From Our Community</span>
+  <h2 class="section-title">What families are saying</h2>
+  <div class="testimonials-inner">
+    <div class="testimonials-image">
+      <img src="images/mother-child.png" alt="Family using homeopathic remedy" loading="lazy">
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <p>"Lua's Kit has become essential in our home. The first time I used Arnica on my son after a fall, I was amazed how quickly he settled. These remedies are the real thing."</p>
+        <cite>— M. Carvalho, São Paulo</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <p>"I love that the labels actually tell me what each remedy is for. Clear, beautiful, and so thoughtfully curated. The quality is exceptional."</p>
+        <cite>— R. Fernandes, Lisbon</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <p>"Cura Materia feels different — you can tell there's real knowledge and love behind every bottle. I've been recommending it to everyone in my mothers' group."</p>
+        <cite>— S. Oliveira, Porto</cite>
       </div>
     </div>
   </div>
 </section>
 
 <!-- LABELS -->
-<section class="labels-section" id="labels">
-  <p class="section-label">Lua's Kit — Label Collection</p>
+<section class="labels-section" id="labels" style="background:var(--cream);">
+  <span class="section-label">Lua's Kit — Label Collection</span>
   <h2 class="section-title">Bottle Labels</h2>
-  <p style="color:var(--muted);max-width:540px;">Each label is hand-designed for Cura Materia's family kit. Print on weatherproof matte or kraft label stock. 1.5" × 2.5" format.</p>
+  <p style="color:var(--muted);max-width:540px;">Print-ready label designs for each remedy. 1.5" × 2.5" format — weatherproof matte or kraft stock.</p>
   <div class="labels-grid">
-
     <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
       <rect width="140" height="220" rx="6" fill="#f5f8f3" stroke="#8a9e82" stroke-width="1.5"/>
       <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#8a9e82" stroke-width="0.5" stroke-dasharray="3,3"/>
@@ -415,7 +613,6 @@
       <text x="70" y="188" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
       <text x="70" y="203" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
     </svg>
-
     <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
       <rect width="140" height="220" rx="6" fill="#fdf8f0" stroke="#b5725a" stroke-width="1.5"/>
       <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#b5725a" stroke-width="0.5" stroke-dasharray="3,3"/>
@@ -431,24 +628,6 @@
       <text x="70" y="178" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
       <text x="70" y="193" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
     </svg>
-
-    <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
-      <rect width="140" height="220" rx="6" fill="#f0ebe0" stroke="#c4a96b" stroke-width="1.5"/>
-      <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#c4a96b" stroke-width="0.5" stroke-dasharray="3,3"/>
-      <text x="70" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#5a6e54" letter-spacing="3">CURA MATERIA</text>
-      <line x1="20" y1="36" x2="120" y2="36" stroke="#c4a96b" stroke-width="0.7"/>
-      <text x="70" y="75" text-anchor="middle" font-size="28">🌱</text>
-      <line x1="20" y1="90" x2="120" y2="90" stroke="#c4a96b" stroke-width="0.7"/>
-      <text x="70" y="108" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#2c2c2c" font-style="italic">Nux Vomica</text>
-      <line x1="30" y1="116" x2="110" y2="116" stroke="#c4a96b" stroke-width="0.5"/>
-      <text x="70" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#2c2c2c" font-weight="bold">30C</text>
-      <text x="70" y="151" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#7a7169">Digestion · Irritability</text>
-      <text x="70" y="163" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#7a7169">Overindulgence · Stress</text>
-      <line x1="20" y1="172" x2="120" y2="172" stroke="#c4a96b" stroke-width="0.5"/>
-      <text x="70" y="185" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
-      <text x="70" y="200" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
-    </svg>
-
     <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
       <rect width="140" height="220" rx="6" fill="#f8f5f0" stroke="#9e8a72" stroke-width="1.5"/>
       <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#9e8a72" stroke-width="0.5" stroke-dasharray="3,3"/>
@@ -464,7 +643,6 @@
       <text x="70" y="178" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
       <text x="70" y="193" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
     </svg>
-
     <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
       <rect width="140" height="220" rx="6" fill="#f0ede8" stroke="#7a7169" stroke-width="1.5"/>
       <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#7a7169" stroke-width="0.5" stroke-dasharray="3,3"/>
@@ -481,7 +659,6 @@
       <text x="70" y="191" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
       <text x="70" y="206" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
     </svg>
-
     <svg width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
       <rect width="140" height="220" rx="6" fill="#f5f0f5" stroke="#a07898" stroke-width="1.5"/>
       <rect x="8" y="8" width="124" height="204" rx="4" fill="none" stroke="#a07898" stroke-width="0.5" stroke-dasharray="3,3"/>
@@ -497,169 +674,10 @@
       <text x="70" y="178" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#8a9e82">80 pellets — 1 oz</text>
       <text x="70" y="193" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#b0b0a0">curamateria.com</text>
     </svg>
-
   </div>
   <div style="margin-top:2.5rem;display:flex;gap:1rem;">
-    <a href="#" class="btn btn-primary">Download All Labels (PDF)</a>
+    <a href="#" class="btn btn-primary-dark">Download All Labels (PDF)</a>
     <a href="#" class="btn btn-outline">Add Custom Remedy</a>
-  </div>
-</section>
-
-<!-- STORE -->
-<section class="store" id="store">
-  <p class="section-label">Shop</p>
-  <h2 class="section-title">Remedies &amp; Kits</h2>
-  <div class="store-filters">
-    <button class="filter-btn active">All</button>
-    <button class="filter-btn">Acute Care</button>
-    <button class="filter-btn">Children</button>
-    <button class="filter-btn">Emotional</button>
-    <button class="filter-btn">Digestive</button>
-    <button class="filter-btn">Kits</button>
-  </div>
-  <div class="products-grid">
-
-    <div class="product-card">
-      <div class="product-img">
-        <svg width="70" height="170" viewBox="0 0 70 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="22" y="2" width="26" height="16" rx="3" fill="#c9b89a"/>
-          <rect x="16" y="16" width="38" height="4" rx="1" fill="#b5a08a"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="#f5f8f3"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="none" stroke="#8a9e82" stroke-width="1.2"/>
-          <rect x="10" y="42" width="50" height="95" rx="3" fill="#e8ede5" stroke="#8a9e82" stroke-width="0.7"/>
-          <text x="35" y="57" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#5a6e54" letter-spacing="1.2">CURA MATERIA</text>
-          <text x="35" y="75" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#2c2c2c" font-style="italic">Arnica</text>
-          <text x="35" y="87" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#5a6e54">30C</text>
-          <text x="35" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#7a7169">Trauma · Bruising</text>
-          <text x="35" y="112" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#8a9e82">80 pellets</text>
-        </svg>
-      </div>
-      <div class="product-name">Arnica Montana</div>
-      <div class="product-sub">30C · Single Remedy</div>
-      <div class="product-price">$14.00</div>
-      <button class="product-add">Add to Bag</button>
-    </div>
-
-    <div class="product-card">
-      <div class="product-img" style="background:#fdf8f0;">
-        <svg width="70" height="170" viewBox="0 0 70 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="22" y="2" width="26" height="16" rx="3" fill="#c9b89a"/>
-          <rect x="16" y="16" width="38" height="4" rx="1" fill="#b5a08a"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="#fdf8f0"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="none" stroke="#b5725a" stroke-width="1.2"/>
-          <rect x="10" y="42" width="50" height="95" rx="3" fill="#faf3e8" stroke="#b5725a" stroke-width="0.7"/>
-          <text x="35" y="57" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#5a6e54" letter-spacing="1.2">CURA MATERIA</text>
-          <text x="35" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#2c2c2c" font-style="italic">Belladonna</text>
-          <text x="35" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#b5725a">30C</text>
-          <text x="35" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#7a7169">Fever · Inflammation</text>
-          <text x="35" y="112" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#8a9e82">80 pellets</text>
-        </svg>
-      </div>
-      <div class="product-name">Belladonna</div>
-      <div class="product-sub">30C · Single Remedy</div>
-      <div class="product-price">$14.00</div>
-      <button class="product-add">Add to Bag</button>
-    </div>
-
-    <div class="product-card">
-      <div class="product-img" style="background:#2c2c2c;gap:4px;display:flex;align-items:center;justify-content:center;position:relative;">
-        <svg width="40" height="125" viewBox="0 0 40 125" fill="none"><rect x="11" y="2" width="18" height="12" rx="2" fill="#8a9e82"/><rect x="7" y="12" width="26" height="3" rx="1" fill="#7a8e72"/><rect x="2" y="15" width="36" height="107" rx="4" fill="#f5f8f3"/><rect x="2" y="15" width="36" height="107" rx="4" fill="none" stroke="#8a9e82" stroke-width="0.8"/><rect x="6" y="30" width="28" height="68" rx="2" fill="#e8ede5" stroke="#8a9e82" stroke-width="0.5"/><text x="20" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#2c2c2c" font-style="italic">Arnica</text><text x="20" y="62" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#5a6e54">30C</text></svg>
-        <svg width="40" height="115" viewBox="0 0 40 115" fill="none"><rect x="11" y="2" width="18" height="12" rx="2" fill="#b5725a"/><rect x="7" y="12" width="26" height="3" rx="1" fill="#a06248"/><rect x="2" y="15" width="36" height="97" rx="4" fill="#fdf8f0"/><rect x="2" y="15" width="36" height="97" rx="4" fill="none" stroke="#b5725a" stroke-width="0.8"/><rect x="6" y="30" width="28" height="58" rx="2" fill="#faf3e8" stroke="#b5725a" stroke-width="0.5"/><text x="20" y="48" text-anchor="middle" font-family="Georgia,serif" font-size="6.5" fill="#2c2c2c" font-style="italic">Bellad.</text><text x="20" y="60" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#b5725a">30C</text></svg>
-        <svg width="40" height="130" viewBox="0 0 40 130" fill="none"><rect x="11" y="2" width="18" height="12" rx="2" fill="#c4a96b"/><rect x="7" y="12" width="26" height="3" rx="1" fill="#b09858"/><rect x="2" y="15" width="36" height="112" rx="4" fill="#f8f5e8"/><rect x="2" y="15" width="36" height="112" rx="4" fill="none" stroke="#c4a96b" stroke-width="0.8"/><rect x="6" y="30" width="28" height="70" rx="2" fill="#f5f0de" stroke="#c4a96b" stroke-width="0.5"/><text x="20" y="50" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#2c2c2c" font-style="italic">Nux Vom.</text><text x="20" y="62" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#c4a96b">30C</text></svg>
-        <div style="color:#c9b89a;font-family:Georgia,serif;font-size:0.9rem;font-style:italic;position:absolute;bottom:10px;right:10px;">+9 more</div>
-      </div>
-      <div class="product-name">Lua's Family Starter Kit</div>
-      <div class="product-sub">12 remedies · 30C · Curated Kit</div>
-      <div class="product-price">$128.00</div>
-      <button class="product-add featured">Add to Bag</button>
-    </div>
-
-    <div class="product-card">
-      <div class="product-img" style="background:#f8f5f0;">
-        <svg width="70" height="170" viewBox="0 0 70 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="22" y="2" width="26" height="16" rx="3" fill="#c9b89a"/>
-          <rect x="16" y="16" width="38" height="4" rx="1" fill="#b5a08a"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="#f8f5f0"/>
-          <rect x="5" y="20" width="60" height="145" rx="5" fill="none" stroke="#9e8a72" stroke-width="1.2"/>
-          <rect x="10" y="42" width="50" height="95" rx="3" fill="#f5f0e8" stroke="#9e8a72" stroke-width="0.7"/>
-          <text x="35" y="57" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#5a6e54" letter-spacing="1.2">CURA MATERIA</text>
-          <text x="35" y="74" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" fill="#2c2c2c" font-style="italic">Chamomilla</text>
-          <text x="35" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="#9e8a72">30C</text>
-          <text x="35" y="100" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#7a7169">Teething · Colic</text>
-          <text x="35" y="112" text-anchor="middle" font-family="Georgia,serif" font-size="5.5" fill="#8a9e82">80 pellets</text>
-        </svg>
-      </div>
-      <div class="product-name">Chamomilla</div>
-      <div class="product-sub">30C · Children's Collection</div>
-      <div class="product-price">$14.00</div>
-      <button class="product-add">Add to Bag</button>
-    </div>
-
-  </div>
-  <div style="text-align:center;margin-top:3rem;">
-    <a href="#" class="btn btn-outline">View All Remedies</a>
-  </div>
-</section>
-
-<!-- KIT -->
-<section class="kit-section" id="kit">
-  <div class="kit-grid">
-    <div>
-      <p class="section-label">Curated Collection</p>
-      <h2 class="section-title">Lua's Family<br>Starter Kit</h2>
-      <p>Twelve essential remedies chosen for everyday family life — from teething to fevers, bruises to sleepless nights. Beautifully boxed, with a printed guide to help you find the right remedy.</p>
-      <div class="kit-remedies">
-        <span>✦ Arnica Montana 30C</span>
-        <span>✦ Belladonna 30C</span>
-        <span>✦ Nux Vomica 30C</span>
-        <span>✦ Chamomilla 30C</span>
-        <span>✦ Pulsatilla 30C</span>
-        <span>✦ Ignatia 200C</span>
-        <span>✦ Apis Mellifica 30C</span>
-        <span>✦ Aconitum 30C</span>
-        <span>✦ Rhus Tox 30C</span>
-        <span>✦ Bryonia 30C</span>
-        <span>✦ Hepar Sulph 30C</span>
-        <span>✦ Phosphorus 30C</span>
-      </div>
-      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-        <a href="#" class="btn" style="background:var(--sage);color:var(--warm-white);">Add Kit to Bag — $128</a>
-        <span style="font-size:0.8rem;color:var(--muted);">Free booklet included</span>
-      </div>
-    </div>
-    <div class="kit-preview">
-      <svg width="44" height="150" viewBox="0 0 44 150" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#8a9e82"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#7a8e72"/><rect x="3" y="16" width="38" height="130" rx="5" fill="#f5f8f3"/><rect x="3" y="16" width="38" height="130" rx="5" fill="none" stroke="#8a9e82" stroke-width="1"/><rect x="7" y="32" width="30" height="80" rx="2" fill="#e8ede5" stroke="#8a9e82" stroke-width="0.6"/><text x="22" y="56" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#2c2c2c" font-style="italic">Arnica</text><text x="22" y="68" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#5a6e54">30C</text></svg>
-      <svg width="44" height="140" viewBox="0 0 44 140" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#b5725a"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#a06248"/><rect x="3" y="16" width="38" height="120" rx="5" fill="#fdf8f0"/><rect x="3" y="16" width="38" height="120" rx="5" fill="none" stroke="#b5725a" stroke-width="1"/><rect x="7" y="32" width="30" height="72" rx="2" fill="#faf3e8" stroke="#b5725a" stroke-width="0.6"/><text x="22" y="53" text-anchor="middle" font-family="Georgia,serif" font-size="6.5" fill="#2c2c2c" font-style="italic">Bellad.</text><text x="22" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#b5725a">30C</text></svg>
-      <svg width="44" height="155" viewBox="0 0 44 155" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#c4a96b"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#b09858"/><rect x="3" y="16" width="38" height="135" rx="5" fill="#f8f5e8"/><rect x="3" y="16" width="38" height="135" rx="5" fill="none" stroke="#c4a96b" stroke-width="1"/><rect x="7" y="32" width="30" height="82" rx="2" fill="#f5f0de" stroke="#c4a96b" stroke-width="0.6"/><text x="22" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#2c2c2c" font-style="italic">Nux Vom.</text><text x="22" y="66" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#c4a96b">30C</text></svg>
-      <svg width="44" height="145" viewBox="0 0 44 145" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#9e8a72"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#8e7a62"/><rect x="3" y="16" width="38" height="125" rx="5" fill="#f8f5f0"/><rect x="3" y="16" width="38" height="125" rx="5" fill="none" stroke="#9e8a72" stroke-width="1"/><rect x="7" y="32" width="30" height="76" rx="2" fill="#f5f0e8" stroke="#9e8a72" stroke-width="0.6"/><text x="22" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#2c2c2c" font-style="italic">Chamo.</text><text x="22" y="66" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#9e8a72">30C</text></svg>
-      <svg width="44" height="135" viewBox="0 0 44 135" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#7a7169"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#6a6158"/><rect x="3" y="16" width="38" height="115" rx="5" fill="#f0ede8"/><rect x="3" y="16" width="38" height="115" rx="5" fill="none" stroke="#7a7169" stroke-width="1"/><rect x="7" y="32" width="30" height="68" rx="2" fill="#ebe8e0" stroke="#7a7169" stroke-width="0.6"/><text x="22" y="53" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#2c2c2c" font-style="italic">Ignatia</text><text x="22" y="65" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#7a7169">200C</text></svg>
-      <svg width="44" height="150" viewBox="0 0 44 150" fill="none"><rect x="13" y="2" width="18" height="13" rx="2" fill="#a07898"/><rect x="9" y="13" width="26" height="3" rx="1" fill="#906888"/><rect x="3" y="16" width="38" height="130" rx="5" fill="#f5f0f5"/><rect x="3" y="16" width="38" height="130" rx="5" fill="none" stroke="#a07898" stroke-width="1"/><rect x="7" y="32" width="30" height="80" rx="2" fill="#f0eaf0" stroke="#a07898" stroke-width="0.6"/><text x="22" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#2c2c2c" font-style="italic">Pulsatilla</text><text x="22" y="66" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#a07898">30C</text></svg>
-    </div>
-  </div>
-</section>
-
-<!-- EDUCATION -->
-<section class="education" id="education">
-  <p class="section-label">Learn</p>
-  <h2 class="section-title">Understanding Homeopathy</h2>
-  <div class="edu-grid">
-    <div class="edu-card"><div class="edu-card-header">📖</div><div class="edu-card-body"><h3>What is Classical Homeopathy?</h3><p>Classical homeopathy uses a single remedy chosen to match the whole person — physical, emotional, and mental symptoms together.</p><a href="#">Read More →</a></div></div>
-    <div class="edu-card"><div class="edu-card-header">🔬</div><div class="edu-card-body"><h3>How Potencies Work</h3><p>Understanding 6C, 30C, 200C and 1M — what potency means and when to use each in acute and chronic care.</p><a href="#">Read More →</a></div></div>
-    <div class="edu-card"><div class="edu-card-header">👨‍👩‍👧</div><div class="edu-card-body"><h3>Homeopathy for Families</h3><p>A guide to building a home remedy kit and handling common acute situations — fevers, injuries, colds, and more.</p><a href="#">Read More →</a></div></div>
-    <div class="edu-card"><div class="edu-card-header">🌿</div><div class="edu-card-body"><h3>Materia Medica Spotlight</h3><p>Monthly deep dives into a single remedy — its source, keynote symptoms, and clinical applications.</p><a href="#">Read More →</a></div></div>
-    <div class="edu-card"><div class="edu-card-header">💧</div><div class="edu-card-body"><h3>Taking Your Remedy</h3><p>How to dose, how often, how to store, and what to avoid — a plain-language guide to using remedies correctly.</p><a href="#">Read More →</a></div></div>
-    <div class="edu-card"><div class="edu-card-header">🧠</div><div class="edu-card-body"><h3>Hahnemann &amp; The Organon</h3><p>The history and philosophy of homeopathy — from Samuel Hahnemann's discovery to the 6th edition of the Organon.</p><a href="#">Read More →</a></div></div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <p class="section-label">From Our Community</p>
-  <h2 class="section-title">What families are saying</h2>
-  <div class="testimonials-grid">
-    <div class="testimonial"><div class="stars">★ ★ ★ ★ ★</div><p>"Lua's Kit has become essential in our home. The first time I used Arnica on my son after a fall, I was amazed how quickly he settled. These remedies are the real thing."</p><cite>— M. Carvalho, São Paulo</cite></div>
-    <div class="testimonial"><div class="stars">★ ★ ★ ★ ★</div><p>"I love that the labels actually tell me what each remedy is for. Clear, beautiful, and so thoughtfully curated. The quality is exceptional."</p><cite>— R. Fernandes, Lisbon</cite></div>
-    <div class="testimonial"><div class="stars">★ ★ ★ ★ ★</div><p>"Cura Materia feels different — you can tell there's real knowledge and love behind every bottle. I've been recommending it to everyone in my mothers' group."</p><cite>— S. Oliveira, Porto</cite></div>
   </div>
 </section>
 
@@ -710,12 +728,23 @@
 </footer>
 
 <script>
+  // Hero parallax bg
+  const heroBg = document.getElementById('heroBg');
+  setTimeout(() => heroBg.classList.add('loaded'), 100);
+
+  // Filter buttons
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
     });
   });
+
+  // Subtle hero parallax on scroll
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroBg.style.transform = `translateY(${y * 0.3}px)`;
+  }, { passive: true });
 </script>
 
 </body>
