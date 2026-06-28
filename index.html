@@ -291,8 +291,110 @@
   .labels-grid svg { transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); border-radius: 6px; }
   .labels-grid svg:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
 
+  /* LOGOS AI SECTION */
+  .logos-section {
+    background: var(--charcoal);
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 520px; overflow: hidden;
+  }
+  .logos-text {
+    padding: 5rem 4rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .logos-text .section-label { color: var(--gold); }
+  .logos-text .section-title { color: var(--cream); margin-bottom: 1.2rem; }
+  .logos-text p { color: rgba(245,240,232,0.7); max-width: 400px; margin-bottom: 1rem; line-height: 1.8; }
+  .logos-features {
+    display: flex; flex-direction: column; gap: 0.7rem; margin: 1.5rem 0 2rem;
+  }
+  .logos-feature {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-size: 0.85rem; color: rgba(245,240,232,0.75);
+  }
+  .logos-feature::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .logos-preview {
+    position: relative; overflow: hidden;
+    background: #1a1a1a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logos-preview-inner {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1.5rem; padding: 3rem;
+  }
+  .logos-mockup {
+    background: #1e3520;
+    border: 1px solid rgba(184,146,42,0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 320px; width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  }
+  .logos-mockup-header {
+    display: flex; align-items: center; gap: 0.7rem;
+    margin-bottom: 1.2rem; padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(184,146,42,0.2);
+  }
+  .logos-mockup-icon {
+    width: 32px; height: 32px; background: rgba(184,146,42,0.2);
+    border: 1px solid rgba(184,146,42,0.4); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  .logos-mockup-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 300; color: var(--cream); letter-spacing: 2px;
+  }
+  .logos-bubble-ai {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(184,146,42,0.15);
+    border-radius: 4px 12px 12px 12px;
+    padding: 0.8rem 1rem; font-size: 0.8rem;
+    color: rgba(245,240,232,0.8); line-height: 1.6; margin-bottom: 0.8rem;
+  }
+  .logos-bubble-user {
+    background: #2c4a2e;
+    border-radius: 12px 4px 12px 12px;
+    padding: 0.7rem 1rem; font-size: 0.8rem;
+    color: rgba(245,240,232,0.9); line-height: 1.6;
+    text-align: right; margin-left: auto; max-width: 80%;
+  }
+
+  /* FLOATING ASK LOGOS BUTTON */
+  .logos-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+    display: flex; align-items: center; gap: 0.6rem;
+    background: #2c4a2e; color: var(--cream);
+    padding: 0.75rem 1.3rem; border-radius: 100px;
+    text-decoration: none; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: 'Jost', sans-serif; font-weight: 400;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    transition: all 250ms var(--ease-out);
+    border: 1px solid rgba(196,169,107,0.3);
+  }
+  .logos-float:hover {
+    background: #3a5e3c; transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .logos-float-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
   /* RESPONSIVE */
   @media (max-width: 960px) {
+    .logos-section { grid-template-columns: 1fr; }
+    .logos-preview { min-height: 340px; }
+    .logos-text { padding: 3.5rem 1.5rem; }
+
     nav { padding: 0 1.5rem; }
     .nav-links { display: none; }
     section { padding: 3.5rem 1.5rem; }
@@ -332,8 +434,8 @@
     <li><a href="#store">Shop</a></li>
     <li><a href="#kit">Lua's Kit</a></li>
     <li><a href="#education">Learn</a></li>
+    <li><a href="#logos">Ask Logos</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#labels">Labels</a></li>
   </ul>
   <button class="nav-cart">Bag (0)</button>
 </nav>
@@ -681,6 +783,39 @@
   </div>
 </section>
 
+<!-- LOGOS AI -->
+<section class="logos-section" id="logos">
+  <div class="logos-text">
+    <span class="section-label">AI Homeopath Assistant</span>
+    <h2 class="section-title">Meet Logos —<br>your remedy guide</h2>
+    <p>Logos is an intelligent homeopathic assistant trained in classical materia medica. Ask about remedies, potencies, symptoms, and indications — available anytime, in any language.</p>
+    <div class="logos-features">
+      <div class="logos-feature">Symptom-to-remedy matching based on classical repertory</div>
+      <div class="logos-feature">Detailed materia medica for every remedy in Lua's Kit</div>
+      <div class="logos-feature">Safe guidance for acute family situations</div>
+      <div class="logos-feature">Available in Portuguese, English, and Spanish</div>
+    </div>
+    <a href="https://logos-ai-production.up.railway.app" target="_blank" rel="noopener" class="btn btn-primary" style="align-self:flex-start;">Open Logos →</a>
+  </div>
+  <div class="logos-preview">
+    <div class="logos-preview-inner">
+      <div class="logos-mockup">
+        <div class="logos-mockup-header">
+          <div class="logos-mockup-icon">🌿</div>
+          <div>
+            <div class="logos-mockup-name">Logos</div>
+            <div style="font-size:0.65rem;letter-spacing:2px;color:#c9a84c;text-transform:uppercase;">Remedy Database</div>
+          </div>
+        </div>
+        <div class="logos-bubble-user">My child has a fever, 39°C, red face, glassy eyes</div>
+        <div class="logos-bubble-ai" style="margin-top:0.8rem;">This picture points strongly to <strong style="color:#c9a84c;">Belladonna 30C</strong> — sudden onset, high fever, face flushed and hot, dilated pupils. Give one dose and observe for 20 minutes…</div>
+        <div class="logos-bubble-user">How often do I repeat?</div>
+        <div class="logos-bubble-ai" style="margin-top:0.8rem;">In acute situations, repeat only if improvement stalls. If the fever improves after the first dose, wait and let the remedy work…</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- NEWSLETTER -->
 <div class="newsletter">
   <h2>Stay close to the medicine</h2>
@@ -726,6 +861,12 @@
   </div>
   <div class="footer-copy">© 2026 Cura Materia. All rights reserved.</div>
 </footer>
+
+<!-- FLOATING LOGOS BUTTON -->
+<a class="logos-float" href="https://logos-ai-production.up.railway.app" target="_blank" rel="noopener">
+  <div class="logos-float-dot"></div>
+  Ask Logos
+</a>
 
 <script>
   // Hero parallax bg
